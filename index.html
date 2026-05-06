@@ -12,9 +12,9 @@
       --black: #050505;
       --dark: #0d0d0d;
       --card-bg: #111111;
-      --red: #cc1a1a;
-      --red-bright: #ff2222;
-      --amber: #d4a017;
+      --red: #d82a92;
+      --red-bright: #e83da0;
+      --amber: #ebf434;
       --white: #f0ede8;
       --grey: #888880;
       --border: rgba(255,255,255,0.08);
@@ -72,7 +72,7 @@
     .header-badge {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 12px;
       color: var(--red);
       border: 1px solid var(--red);
       padding: 4px 12px;
@@ -106,7 +106,7 @@
     /* CAMPAIGN LABEL */
     .campaign-label {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 13px;
       color: var(--amber);
       letter-spacing: 4px;
       text-transform: uppercase;
@@ -117,7 +117,7 @@
     /* HEADER SUB — bigger */
     .header-sub {
       font-family: var(--font-mono);
-      font-size: 14px !important;
+      font-size: 16px !important;
       color: var(--grey);
       letter-spacing: 2px;
       margin-top: 12px;
@@ -125,7 +125,7 @@
 
     .header-date {
       font-family: var(--font-mono);
-      font-size: 15px !important;
+      font-size: 17px !important;
       color: var(--amber);
       letter-spacing: 2px;
       margin-top: 6px;
@@ -133,13 +133,13 @@
 
     /* INTRO DESCRIPTION */
     .intro-desc {
-      background: rgba(204,26,26,0.06);
-      border: 1px solid rgba(204,26,26,0.2);
+      background: rgba(216,42,146,0.06);
+      border: 1px solid rgba(216,42,146,0.2);
       border-left: 3px solid var(--red);
       padding: 20px 24px;
       margin-bottom: 36px;
       font-family: var(--font-body);
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 400;
       color: rgba(240,237,232,0.85);
       line-height: 1.7;
@@ -168,7 +168,7 @@
 
     .form-section-label {
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 12px;
       color: var(--amber);
       letter-spacing: 3px;
       padding: 14px 20px 0;
@@ -192,7 +192,7 @@
 
     .field-group label {
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 12px;
       color: var(--red);
       letter-spacing: 2px;
       text-transform: uppercase;
@@ -205,8 +205,8 @@
       border: 1px solid rgba(255,255,255,0.1);
       color: var(--white);
       font-family: var(--font-mono);
-      font-size: 13px;
-      padding: 10px 12px;
+      font-size: 15px;
+      padding: 11px 12px;
       outline: none;
       transition: border-color 0.2s;
       appearance: none;
@@ -223,7 +223,7 @@
     .field-group select:focus,
     .field-group textarea:focus {
       border-color: var(--amber);
-      background: rgba(212,160,23,0.04);
+      background: rgba(235,244,52,0.04);
     }
 
     .field-group select {
@@ -263,7 +263,7 @@
 
     .ops-subtitle {
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 12px;
       color: var(--grey);
       letter-spacing: 3px;
       margin-bottom: 24px;
@@ -305,7 +305,7 @@
 
     .ops-card-title {
       font-family: var(--font-display);
-      font-size: 18px;
+      font-size: 20px;
       letter-spacing: 2px;
       color: var(--white);
       margin-bottom: 8px;
@@ -313,7 +313,7 @@
 
     .ops-card-text {
       font-family: var(--font-body);
-      font-size: 13px;
+      font-size: 15px;
       color: rgba(240,237,232,0.65);
       line-height: 1.6;
     }
@@ -352,19 +352,19 @@
     }
 
     .drop-zone {
-      border: 1.5px dashed rgba(204, 26, 26, 0.4);
+      border: 1.5px dashed rgba(216, 42, 146, 0.4);
       margin: 16px 20px 20px;
       padding: 48px 24px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s;
       position: relative;
-      background: rgba(204, 26, 26, 0.03);
+      background: rgba(216, 42, 146, 0.03);
     }
 
     .drop-zone:hover, .drop-zone.drag-over {
       border-color: var(--red);
-      background: rgba(204, 26, 26, 0.07);
+      background: rgba(216, 42, 146, 0.07);
     }
 
     .drop-zone input {
@@ -438,7 +438,7 @@
     .btn-generate {
       width: 100%;
       background: var(--red);
-      color: var(--white);
+      color: #ebf434;
       border: none;
       padding: 20px;
       font-family: var(--font-display);
@@ -465,7 +465,7 @@
     .btn-generate:hover {
       background: #e01e1e;
       transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(204,26,26,0.4);
+      box-shadow: 0 8px 24px rgba(216,42,146,0.4);
     }
 
     .btn-generate:disabled {
@@ -552,12 +552,12 @@
     .btn-download:hover {
       background: var(--amber);
       color: var(--black);
-      box-shadow: 0 4px 20px rgba(212, 160, 23, 0.3);
+      box-shadow: 0 4px 20px rgba(235, 244, 52, 0.3);
     }
 
     .share-hint {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 13px;
       color: var(--grey);
       text-align: center;
       letter-spacing: 1px;
@@ -987,7 +987,7 @@
       ctx.fillRect(0, 0, W, H);
 
       // Red accent stripe top
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.fillRect(0, 0, W, 6);
 
       // Scan lines effect
@@ -1077,7 +1077,7 @@
 
       // CLASSIFIED badge
       ctx.save();
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.fillRect(40, 32, 220, 30);
       ctx.font = 'bold 14px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
@@ -1088,20 +1088,38 @@
       // Dosar number
       ctx.save();
       ctx.font = '13px "Share Tech Mono"';
-      ctx.fillStyle = 'rgba(212,160,23,0.9)';
+      ctx.fillStyle = 'rgba(235,244,52,0.9)';
       ctx.textAlign = 'left';
       ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), 40, 88);
       ctx.restore();
 
-      // AGENT SECRET title
+      // AGENT NAME — display user's pet name instead of AGENT SECRET
       ctx.save();
-      ctx.font = '900 108px "Bebas Neue"';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'left';
-      ctx.letterSpacing = '4px';
-      ctx.fillText('AGENT', 40, 195);
-      ctx.fillStyle = '#cc1a1a';
-      ctx.fillText('SECRET', 40, 295);
+      const displayName = (d.numeAgent || '').toUpperCase();
+      if (displayName) {
+        // Single name — big and bold
+        ctx.font = '900 108px "Bebas Neue"';
+        ctx.textAlign = 'left';
+        // First word white, rest pink
+        const nameParts = displayName.split(' ');
+        if (nameParts.length === 1) {
+          ctx.fillStyle = '#fff';
+          ctx.fillText(nameParts[0], 40, 260);
+        } else {
+          ctx.fillStyle = '#fff';
+          ctx.fillText(nameParts[0], 40, 195);
+          ctx.fillStyle = '#d82a92';
+          ctx.fillText(nameParts.slice(1).join(' '), 40, 295);
+        }
+      } else {
+        // Fallback to AGENT SECRET if no name provided
+        ctx.font = '900 108px "Bebas Neue"';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'left';
+        ctx.fillText('AGENT', 40, 195);
+        ctx.fillStyle = '#d82a92';
+        ctx.fillText('SECRET', 40, 295);
+      }
       ctx.restore();
     }
 
@@ -1116,7 +1134,7 @@
       ctx.fillRect(0, panelY, 1080, panelH);
 
       // Top border red line
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.fillRect(0, panelY, 1080, 3);
       ctx.restore();
 
@@ -1134,11 +1152,11 @@
       if (agentDisplayName) {
         ctx.save();
         ctx.font = '13px "Share Tech Mono"';
-        ctx.fillStyle = 'rgba(212,160,23,0.7)';
+        ctx.fillStyle = 'rgba(235,244,52,0.7)';
         ctx.textAlign = 'left';
         ctx.fillText('AGENT:', 40, panelY + 26);
         ctx.font = 'bold 16px "Share Tech Mono"';
-        ctx.fillStyle = 'rgba(212,160,23,1)';
+        ctx.fillStyle = 'rgba(235,244,52,1)';
         ctx.fillText(agentDisplayName.toUpperCase(), 110, panelY + 26);
         ctx.restore();
       }
@@ -1155,7 +1173,7 @@
       // Underline after code name
       const underlineY = panelY + (agentDisplayName ? 108 : 84);
       ctx.save();
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.fillRect(40, underlineY, 580, 2);
       ctx.restore();
 
@@ -1170,18 +1188,18 @@
 
       fields.forEach((f, i) => {
         const col = i < 2 ? 40 : 550;
-        const row = i < 2 ? (i * 70) : ((i - 2) * 70);
+        const row = i < 2 ? (i * 82) : ((i - 2) * 82);
         const ry = fieldsStartY + row;
 
         ctx.save();
-        ctx.font = '11px "Share Tech Mono"';
-        ctx.fillStyle = '#cc1a1a';
+        ctx.font = 'bold 13px "Share Tech Mono"';
+        ctx.fillStyle = '#d82a92';
         ctx.textAlign = 'left';
         ctx.fillText(f.label + ' :', col, ry);
 
-        ctx.font = '14px "Share Tech Mono"';
-        ctx.fillStyle = 'rgba(240,237,232,0.9)';
-        wrapText(ctx, f.value, col, ry + 20, 460, 18);
+        ctx.font = '17px "Share Tech Mono"';
+        ctx.fillStyle = 'rgba(240,237,232,0.95)';
+        wrapText(ctx, f.value, col, ry + 22, 460, 20);
         ctx.restore();
       });
 
@@ -1191,13 +1209,13 @@
 
       // Nivel amenintare (left)
       ctx.font = '10px "Share Tech Mono"';
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.textAlign = 'left';
       ctx.fillText('NIVEL AMENINȚARE :', 40, nivelY);
 
       const nivel = (d.nivelAmenintare || 'CLASIFICAT').toUpperCase();
-      const nivelColors = { 'RIDICOL': '#4caf50', 'MODERAT': '#ff9800', 'RIDICAT': '#ff5722', 'EXTREM': '#cc1a1a', 'CLASIFICAT': '#d4a017' };
-      const nivelColor = nivelColors[nivel] || '#cc1a1a';
+      const nivelColors = { 'RIDICOL': '#4caf50', 'MODERAT': '#ff9800', 'RIDICAT': '#ff5722', 'EXTREM': '#d82a92', 'CLASIFICAT': '#ebf434' };
+      const nivelColor = nivelColors[nivel] || '#d82a92';
       ctx.fillStyle = nivelColor;
       ctx.fillRect(40, nivelY + 7, 230, 28);
       ctx.font = 'bold 15px "Share Tech Mono"';
@@ -1207,15 +1225,15 @@
       // Nivel experienta (right)
       if (d.nivelExperienta) {
         ctx.font = '10px "Share Tech Mono"';
-        ctx.fillStyle = '#d4a017';
+        ctx.fillStyle = '#ebf434';
         ctx.fillText('NIVEL EXPERIENȚĂ :', 550, nivelY);
-        ctx.fillStyle = 'rgba(212,160,23,0.2)';
+        ctx.fillStyle = 'rgba(235,244,52,0.2)';
         ctx.fillRect(550, nivelY + 7, 230, 28);
-        ctx.strokeStyle = 'rgba(212,160,23,0.6)';
+        ctx.strokeStyle = 'rgba(235,244,52,0.6)';
         ctx.lineWidth = 1;
         ctx.strokeRect(550, nivelY + 7, 230, 28);
         ctx.font = 'bold 14px "Share Tech Mono"';
-        ctx.fillStyle = '#d4a017';
+        ctx.fillStyle = '#ebf434';
         ctx.fillText('★ ' + d.nivelExperienta.toUpperCase(), 562, nivelY + 25);
       }
       ctx.restore();
@@ -1224,7 +1242,7 @@
       if (d.taglineSecret) {
         ctx.save();
         ctx.font = 'italic 18px "DM Sans"';
-        ctx.fillStyle = 'rgba(212,160,23,0.85)';
+        ctx.fillStyle = 'rgba(235,244,52,0.85)';
         ctx.textAlign = 'center';
         ctx.fillText('"' + d.taglineSecret + '"', 540, panelY + (agentDisplayName ? 330 : 310));
         ctx.restore();
@@ -1232,12 +1250,12 @@
 
       // HASHTAGS bottom strip
       ctx.save();
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.fillRect(0, panelY + panelH - 52, 1080, 52);
       ctx.font = '19px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
-      ctx.fillText('#AgentSecretHDF  ·  #HelloDoggieFestival  ·  @hellodoggiero', 540, panelY + panelH - 20);
+      ctx.fillText('#AgentSecretHDF  ·  @hellodoggiero  ·  6-7 Iunie · Insula Câinilor', 540, panelY + panelH - 20);
       ctx.restore();
     }
 
@@ -1274,7 +1292,7 @@
       ];
 
       ctx.save();
-      ctx.strokeStyle = '#cc1a1a';
+      ctx.strokeStyle = '#d82a92';
       ctx.lineWidth = thick;
 
       marks.forEach(([mx, my, dx, dy]) => {
@@ -1295,7 +1313,7 @@
 
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.strokeStyle = '#cc1a1a';
+      ctx.strokeStyle = '#d82a92';
       ctx.lineWidth = 4;
       ctx.stroke();
 
@@ -1305,7 +1323,7 @@
       ctx.stroke();
 
       ctx.font = 'bold 26px "Bebas Neue"';
-      ctx.fillStyle = '#cc1a1a';
+      ctx.fillStyle = '#d82a92';
       ctx.textAlign = 'center';
       ctx.fillText('HDF', cx, cy + 5);
       ctx.font = '9px "Share Tech Mono"';
