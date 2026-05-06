@@ -13,5 +13,6 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = "frame-ancestors 'self' https://hellodoggie.ro https://*.hellodoggie.ro https://*.wordpress.com *"
