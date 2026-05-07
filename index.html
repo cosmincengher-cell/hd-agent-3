@@ -1115,10 +1115,11 @@
       ctx.restore();
 
       // ── PHOTO — right side, portrait frame
+      // Equal margin top/bottom between pink stripes (top=5, bottom=837)
       const photoX = 530;
-      const photoY = 30;
-      const photoW = 510;
       const photoH = 680;
+      const photoW = 510;
+      const photoY = Math.round((topH - 3 - 5 - photoH) / 2) + 5; // centered between stripes
 
       // Glow behind photo
       ctx.save();
@@ -1214,10 +1215,10 @@
       ctx.font = '700 46px "Bebas Neue"';
       if (ctx.measureText(vineText).width > textMaxW) {
         ctx.font = '700 46px "Bebas Neue"';
-        ctx.fillText('VINE LA HELLO', 30, 420 + (nameFontSize > 100 ? 0 : -40));
-        ctx.fillText('DOGGIE FESTIVAL', 30, 420 + 52 + (nameFontSize > 100 ? 0 : -40));
+        ctx.fillText('VINE LA HELLO', 30, 408 + (nameFontSize > 100 ? 0 : -40));
+        ctx.fillText('DOGGIE FESTIVAL', 30, 408 + 52 + (nameFontSize > 100 ? 0 : -40));
       } else {
-        ctx.fillText(vineText, 30, 420);
+        ctx.fillText(vineText, 30, 408);
       }
       ctx.restore();
 
@@ -1228,6 +1229,12 @@
       ctx.save();
       ctx.fillStyle = '#d82a92';
       ctx.fillRect(0, topH - 3, W, 3);
+      ctx.restore();
+
+      // Right pink border line
+      ctx.save();
+      ctx.fillStyle = '#d82a92';
+      ctx.fillRect(W - 6, 0, 6, topH);
       ctx.restore();
     }
 
