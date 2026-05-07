@@ -31,24 +31,29 @@
       font-family: var(--font-body);
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* NOISE OVERLAY */
+    /* NOISE OVERLAY — absolute so it doesn't repeat on scroll */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
       opacity: 0.6;
     }
 
-    /* SCAN LINES */
+    /* SCAN LINES — absolute so it doesn't repeat on scroll */
     body::after {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
       background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
       pointer-events: none;
       z-index: 0;
@@ -228,7 +233,7 @@
 
     .field-group select {
       cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23cc1a1a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ebf434' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
       padding-right: 32px;
@@ -635,7 +640,7 @@
       <span class="campaign-label">— O campanie Hello Doggie —</span>
       <h1>AGENT<br/><span>SECRET</span></h1>
       <div class="divider"></div>
-      <div class="header-sub">HELLO DOGGIE FESTIVAL · BUCUREȘTI · PARCUL TITAN</div>
+      <div class="header-sub"><a href="https://hellodoggie.ro/hello-doggie-festival-2026/" target="_blank" style="text-decoration:none;color:inherit;">HELLO DOGGIE FESTIVAL · BUCUREȘTI · PARCUL TITAN</a></div>
       <div class="header-date">06 – 07 IUNIE 2026 · INSULA CÂINILOR</div>
     </header>
 
@@ -729,7 +734,7 @@
     <!-- RESULT -->
     <div class="result-section" id="resultSection">
       <div class="result-label">// DOSAR GENERAT — DESCARCĂ &amp; DISTRIBUIE</div>
-      <canvas id="cardCanvas" width="1080" height="1080"></canvas>
+      <canvas id="cardCanvas" width="1080" height="1440"></canvas>
       <button class="btn-download" id="downloadBtn">⬇ DESCARCĂ CARDUL</button>
       <div class="share-hint">
         Postează pe Instagram, TikTok sau Facebook cu<br/>
@@ -773,8 +778,8 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-      <div class="footer-logo">HELLO<span>DOGGIE</span>.RO</div>
-      <div class="footer-sub">FESTIVAL 2026 · INTELLIGENCE DIVISION · CLASIFICAT</div>
+      <div class="footer-logo"><a href="https://hellodoggie.ro" target="_blank" style="text-decoration:none;color:inherit;">HELLO<span>DOGGIE</span>.RO</a></div>
+      <div class="footer-sub"><a href="https://hellodoggie.ro/hello-doggie-festival-2026/" target="_blank" style="text-decoration:none;color:inherit;">FESTIVAL 2026</a> · INTELLIGENCE DIVISION · CLASIFICAT</div>
     </footer>
   </div>
 
@@ -964,8 +969,8 @@
     // ── CARD GENERATION ────────────────────────────────────────────────────
     async function generateCard() {
       const W = 1080, H = 1080;
-      canvas.width = W;
-      canvas.height = H;
+      
+      
 
       // BG
       ctx.fillStyle = '#080808';
@@ -979,10 +984,11 @@
 
       // Dark overlay gradient for readability
       const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, 'rgba(0,0,0,0.45)');
-      grad.addColorStop(0.4, 'rgba(0,0,0,0.15)');
-      grad.addColorStop(0.65, 'rgba(0,0,0,0.7)');
-      grad.addColorStop(1, 'rgba(0,0,0,0.95)');
+      grad.addColorStop(0, 'rgba(0,0,0,0.35)');
+      grad.addColorStop(0.35, 'rgba(0,0,0,0.05)');
+      grad.addColorStop(0.58, 'rgba(0,0,0,0.55)');
+      grad.addColorStop(0.72, 'rgba(0,0,0,0.92)');
+      grad.addColorStop(1, 'rgba(0,0,0,0.98)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
@@ -1125,8 +1131,8 @@
 
     function drawDossierSection() {
       const d = agentData;
-      const panelY = 600;
-      const panelH = 450;
+      const panelY = 810;
+      const panelH = 630;
 
       // Panel background
       ctx.save();
@@ -1163,22 +1169,22 @@
 
       // NOME DE COD — big
       ctx.save();
-      ctx.font = '72px "Bebas Neue"';
+      ctx.font = '84px "Bebas Neue"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'left';
       const codeName = (d.numeCod || 'NECUNOSCUT').toUpperCase();
-      ctx.fillText(codeName, 40, panelY + (agentDisplayName ? 100 : 76));
+      ctx.fillText(codeName, 40, panelY + (agentDisplayName ? 110 : 84));
       ctx.restore();
 
       // Underline after code name
-      const underlineY = panelY + (agentDisplayName ? 108 : 84);
+      const underlineY = panelY + (agentDisplayName ? 120 : 94);
       ctx.save();
       ctx.fillStyle = '#d82a92';
       ctx.fillRect(40, underlineY, 580, 2);
       ctx.restore();
 
       // FIELDS — 2 column layout
-      const fieldsStartY = panelY + (agentDisplayName ? 128 : 104);
+      const fieldsStartY = panelY + (agentDisplayName ? 148 : 118);
       const fields = [
         { label: 'SPECIE', value: (d.specie || '—').toUpperCase() },
         { label: 'RASĂ', value: (d.rasa || '—').toUpperCase() },
@@ -1187,28 +1193,28 @@
       ];
 
       fields.forEach((f, i) => {
-        const col = i < 2 ? 40 : 550;
-        const row = i < 2 ? (i * 82) : ((i - 2) * 82);
+        const col = i < 2 ? 40 : 555;
+        const row = i < 2 ? (i * 100) : ((i - 2) * 100);
         const ry = fieldsStartY + row;
 
         ctx.save();
-        ctx.font = 'bold 13px "Share Tech Mono"';
+        ctx.font = 'bold 15px "Share Tech Mono"';
         ctx.fillStyle = '#d82a92';
         ctx.textAlign = 'left';
         ctx.fillText(f.label + ' :', col, ry);
 
-        ctx.font = '17px "Share Tech Mono"';
-        ctx.fillStyle = 'rgba(240,237,232,0.95)';
-        wrapText(ctx, f.value, col, ry + 22, 460, 20);
+        ctx.font = '20px "Share Tech Mono"';
+        ctx.fillStyle = 'rgba(240,237,232,0.97)';
+        wrapText(ctx, f.value, col, ry + 26, 460, 24);
         ctx.restore();
       });
 
       // NIVEL AMENINTARE + NIVEL EXPERIENTA side by side
-      const nivelY = panelY + (agentDisplayName ? 268 : 248);
+      const nivelY = panelY + (agentDisplayName ? 380 : 355);
       ctx.save();
 
       // Nivel amenintare (left)
-      ctx.font = '10px "Share Tech Mono"';
+      ctx.font = 'bold 13px "Share Tech Mono"';
       ctx.fillStyle = '#d82a92';
       ctx.textAlign = 'left';
       ctx.fillText('NIVEL AMENINȚARE :', 40, nivelY);
@@ -1217,17 +1223,17 @@
       const nivelColors = { 'RIDICOL': '#4caf50', 'MODERAT': '#ff9800', 'RIDICAT': '#ff5722', 'EXTREM': '#d82a92', 'CLASIFICAT': '#ebf434' };
       const nivelColor = nivelColors[nivel] || '#d82a92';
       ctx.fillStyle = nivelColor;
-      ctx.fillRect(40, nivelY + 7, 230, 28);
-      ctx.font = 'bold 15px "Share Tech Mono"';
+      ctx.fillRect(40, nivelY + 8, 270, 36);
+      ctx.font = 'bold 18px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
-      ctx.fillText('▸ ' + nivel, 52, nivelY + 25);
+      ctx.fillText('▸ ' + nivel, 54, nivelY + 31);
 
       // Nivel experienta (right)
       if (d.nivelExperienta) {
-        ctx.font = '10px "Share Tech Mono"';
+        ctx.font = 'bold 13px "Share Tech Mono"';
         ctx.fillStyle = '#ebf434';
-        ctx.fillText('NIVEL EXPERIENȚĂ :', 550, nivelY);
-        ctx.fillStyle = 'rgba(235,244,52,0.2)';
+        ctx.fillText('NIVEL EXPERIENȚĂ :', 555, nivelY);
+        ctx.fillStyle = 'rgba(235,244,52,0.12)';
         ctx.fillRect(550, nivelY + 7, 230, 28);
         ctx.strokeStyle = 'rgba(235,244,52,0.6)';
         ctx.lineWidth = 1;
@@ -1255,7 +1261,8 @@
       ctx.font = '19px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
-      ctx.fillText('#AgentSecretHDF  ·  @hellodoggiero  ·  6-7 Iunie · Insula Câinilor', 540, panelY + panelH - 20);
+      ctx.font = '22px "Share Tech Mono"';
+      ctx.fillText('#AgentSecretHDF  ·  @hellodoggiero  ·  6-7 Iunie · Insula Câinilor', 540, panelY + panelH - 22);
       ctx.restore();
     }
 
@@ -1307,7 +1314,7 @@
 
     function drawStamp() {
       // Hello Doggie Festival stamp circle
-      const cx = 900, cy = 720, r = 68;
+      const cx = 900, cy = 960, r = 72;
       ctx.save();
       ctx.globalAlpha = 0.18;
 
