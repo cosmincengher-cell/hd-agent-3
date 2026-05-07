@@ -1100,36 +1100,29 @@
       ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), 40, 96);
       ctx.restore();
 
-      // "AGENTUL" label in pink
-      ctx.save();
-      ctx.font = '700 68px "Bebas Neue"';
-      ctx.fillStyle = '#d82a92';
-      ctx.textAlign = 'left';
-      ctx.fillText('AGENTUL', 40, 170);
-      ctx.restore();
-
-      // Agent name — big white
+      // Agent name — big white (anchored at y=220)
       const displayName = (d.numeAgent || d.numeCod || 'NECUNOSCUT').toUpperCase();
-      ctx.save();
-      ctx.font = '900 118px "Bebas Neue"';
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'left';
-      // Fit long names
       let nameFontSize = 118;
+      ctx.save();
       ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
       while (ctx.measureText(displayName).width > W - 80 && nameFontSize > 60) {
         nameFontSize -= 4;
         ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
       }
-      ctx.fillText(displayName, 40, 170 + nameFontSize + 10);
-      ctx.restore();
-
-      // Tagline "VINE LA HELLO DOGGIE FESTIVAL" in yellow
-      ctx.save();
-      ctx.font = '700 52px "Bebas Neue"';
-      ctx.fillStyle = '#ebf434';
+      const nameY = 240;
+      // "AGENTUL" sits 6px above the name baseline - 68px cap height ≈ 52px
+      ctx.font = '700 62px "Bebas Neue"';
+      ctx.fillStyle = '#d82a92';
       ctx.textAlign = 'left';
-      ctx.fillText('VINE LA HELLO DOGGIE FESTIVAL', 40, 400);
+      ctx.fillText('AGENTUL', 40, nameY - nameFontSize + 52);
+      // Name
+      ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
+      ctx.fillStyle = '#fff';
+      ctx.fillText(displayName, 40, nameY);
+      // "VINE LA HELLO DOGGIE FESTIVAL" — 10px below name baseline
+      ctx.font = '700 50px "Bebas Neue"';
+      ctx.fillStyle = '#ebf434';
+      ctx.fillText('VINE LA HELLO DOGGIE FESTIVAL', 40, nameY + 58);
       ctx.restore();
     }
 
@@ -1141,7 +1134,7 @@
 
       // Panel background
       ctx.save();
-      ctx.fillStyle = 'rgba(0,0,0,0.92)';
+      ctx.fillStyle = '#080808';
       ctx.fillRect(0, panelY, W, panelH);
 
       // Top pink border line
@@ -1186,7 +1179,7 @@
       const fieldsTop = tagY + 74;
       const col1 = 40;
       const col2 = 555;
-      const rowH = 130;
+      const rowH = 148;
 
       const fields = [
         { label: 'SPECIE :', value: (d.specie || '—').toUpperCase(), col: col1, row: 0 },
@@ -1200,15 +1193,15 @@
         ctx.save();
 
         // Label
-        ctx.font = 'bold 15px "Share Tech Mono"';
+        ctx.font = 'bold 19px "Share Tech Mono"';
         ctx.fillStyle = '#d82a92';
         ctx.textAlign = 'left';
         ctx.fillText(f.label, f.col, ry);
 
         // Value
-        ctx.font = '26px "Share Tech Mono"';
+        ctx.font = '30px "Share Tech Mono"';
         ctx.fillStyle = 'rgba(240,237,232,0.97)';
-        wrapText(ctx, f.value, f.col, ry + 36, 460, 30);
+        wrapText(ctx, f.value, f.col, ry + 40, 460, 34);
         ctx.restore();
       });
 
