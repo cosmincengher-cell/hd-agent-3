@@ -1079,28 +1079,28 @@
       const d = agentData;
       const W = 1080;
 
-      // CLASSIFIED badge — top left
+      // CLASSIFIED badge — top RIGHT
       ctx.save();
       ctx.fillStyle = '#d82a92';
-      ctx.fillRect(40, 36, 240, 34);
+      ctx.fillRect(W - 280, 36, 240, 34);
       ctx.font = 'bold 13px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'left';
-      ctx.fillText('■  STRICT CLASIFICAT  ■', 54, 58);
+      ctx.fillText('■  STRICT CLASIFICAT  ■', W - 266, 58);
       ctx.restore();
 
-      // Barcode — top right
-      drawBarcode(W - 44, 36);
-
-      // Dosar number
+      // Dosar number — top right under badge
       ctx.save();
       ctx.font = '14px "Share Tech Mono"';
       ctx.fillStyle = 'rgba(235,244,52,0.9)';
-      ctx.textAlign = 'left';
-      ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), 40, 96);
+      ctx.textAlign = 'right';
+      ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), W - 40, 96);
       ctx.restore();
 
-      // Agent name — big white (anchored at y=220)
+      // Barcode — top right under dosar
+      drawBarcode(W - 44, 108);
+
+      // Agent name — big white, anchored at nameY
       const displayName = (d.numeAgent || d.numeCod || 'NECUNOSCUT').toUpperCase();
       let nameFontSize = 118;
       ctx.save();
@@ -1109,20 +1109,24 @@
         nameFontSize -= 4;
         ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
       }
-      const nameY = 240;
-      // "AGENTUL" sits 6px above the name baseline - 68px cap height ≈ 52px
-      ctx.font = '700 62px "Bebas Neue"';
+      const nameY = 310;
+      const gapAbove = 58; // same gap as VINE LA below
+
+      // "AGENTUL" — exactly gapAbove px above name top (nameY - nameFontSize = name top)
+      ctx.font = '700 50px "Bebas Neue"';
       ctx.fillStyle = '#d82a92';
       ctx.textAlign = 'left';
-      ctx.fillText('AGENTUL', 40, nameY - nameFontSize + 52);
+      ctx.fillText('AGENTUL', 40, nameY - nameFontSize + 44 - gapAbove + 10);
+
       // Name
       ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
       ctx.fillStyle = '#fff';
       ctx.fillText(displayName, 40, nameY);
-      // "VINE LA HELLO DOGGIE FESTIVAL" — 10px below name baseline
+
+      // "VINE LA HELLO DOGGIE FESTIVAL" — gapAbove px below name baseline
       ctx.font = '700 50px "Bebas Neue"';
       ctx.fillStyle = '#ebf434';
-      ctx.fillText('VINE LA HELLO DOGGIE FESTIVAL', 40, nameY + 58);
+      ctx.fillText('VINE LA HELLO DOGGIE FESTIVAL', 40, nameY + gapAbove + 8);
       ctx.restore();
     }
 
@@ -1176,10 +1180,10 @@
       ctx.restore();
 
       // Fields grid — 2 columns
-      const fieldsTop = tagY + 74;
+      const fieldsTop = tagY + 64;
       const col1 = 40;
       const col2 = 555;
-      const rowH = 148;
+      const rowH = 126;
 
       const fields = [
         { label: 'SPECIE :', value: (d.specie || '—').toUpperCase(), col: col1, row: 0 },
