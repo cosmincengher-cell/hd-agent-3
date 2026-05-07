@@ -982,21 +982,7 @@
       // Draw the agent photo
       await drawAgentPhoto();
 
-      // Dark overlay gradient for readability
-      const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, 'rgba(0,0,0,0.35)');
-      grad.addColorStop(0.35, 'rgba(0,0,0,0.05)');
-      grad.addColorStop(0.58, 'rgba(0,0,0,0.55)');
-      grad.addColorStop(0.72, 'rgba(0,0,0,0.92)');
-      grad.addColorStop(1, 'rgba(0,0,0,0.98)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-
-      // Red accent stripe top
-      ctx.fillStyle = '#d82a92';
-      ctx.fillRect(0, 0, W, 6);
-
-      // Scan lines effect
+      // Scan lines effect (subtle, on top of everything)
       drawScanLines();
 
       // TOP SECTION
@@ -1039,31 +1025,13 @@
         img.crossOrigin = 'anonymous';
 
         const onLoad = () => {
-          // Fill entire canvas with image (cover)
-          const ratio = img.width / img.height;
-          let sw = 1080, sh = 1440;
-          let sx = 0, sy = 0;
-          if (ratio > sh/sw) { sw = sh * ratio; sx = -(sw - 1080) / 2; }
-          else { sh = sw / ratio; sy = -(sh - 1440) / 4; }
-
-          // Apply noir filter via canvas
-          ctx.save();
-          ctx.filter = 'grayscale(85%) contrast(1.3) brightness(0.85)';
-          ctx.drawImage(img, sx, sy, sw, sh);
-          ctx.filter = 'none';
-
-          // Sepia tint overlay
-          ctx.globalAlpha = 0.12;
-          ctx.fillStyle = '#1a0a00';
-          ctx.fillRect(0, 0, 1080, 1080);
-          ctx.globalAlpha = 1;
-          ctx.restore();
+          // Save reference so drawTopSection can use it in the photo frame
+          window._petImage = img;
           resolve();
         };
 
         img.onload = onLoad;
         img.onerror = () => {
-          // Fallback: use original base64
           img.src = `data:${mediaType};base64,${imageBase64}`;
         };
 
@@ -1078,55 +1046,188 @@
     function drawTopSection() {
       const d = agentData;
       const W = 1080;
+      const topH = 840; // total top section height
 
-      // CLASSIFIED badge — top RIGHT
+      // ── BACKGROUND — solid black top section
+      ctx.save();
+      ctx.fillStyle = '#080808';
+      ctx.fillRect(0, 0, W, topH);
+      ctx.restore();
+
+      // ── DECORATIVE ELEMENTS — left side graphic elements
+      // Horizontal lines pattern
+      ctx.save();
+      ctx.strokeStyle = 'rgba(216,42,146,0.15)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 18; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, 60 + i * 42);
+        ctx.lineTo(520, 60 + i * 42);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Pink accent vertical bar left edge
       ctx.save();
       ctx.fillStyle = '#d82a92';
-      ctx.fillRect(W - 280, 36, 240, 34);
-      ctx.font = 'bold 13px "Share Tech Mono"';
+      ctx.fillRect(0, 0, 6, topH);
+      ctx.restore();
+
+      // Top pink stripe
+      ctx.save();
+      ctx.fillStyle = '#d82a92';
+      ctx.fillRect(0, 0, W, 5);
+      ctx.restore();
+
+      // Decorative corner bracket top-left
+      ctx.save();
+      ctx.strokeStyle = '#d82a92';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(30, 30); ctx.lineTo(30, 80); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(30, 30); ctx.lineTo(120, 30); ctx.stroke();
+      ctx.restore();
+
+      // Glow circles decoration — left background
+      ctx.save();
+      const glowGrad = ctx.createRadialGradient(260, 420, 0, 260, 420, 320);
+      glowGrad.addColorStop(0, 'rgba(216,42,146,0.08)');
+      glowGrad.addColorStop(1, 'rgba(216,42,146,0)');
+      ctx.fillStyle = glowGrad;
+      ctx.fillRect(0, 100, 520, topH - 100);
+      ctx.restore();
+
+      // ── CLASSIFIED badge — top left (under corner bracket)
+      ctx.save();
+      ctx.fillStyle = '#d82a92';
+      ctx.fillRect(30, 50, 230, 30);
+      ctx.font = 'bold 12px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'left';
-      ctx.fillText('■  STRICT CLASIFICAT  ■', W - 266, 58);
+      ctx.fillText('■  STRICT CLASIFICAT  ■', 44, 69);
       ctx.restore();
 
-      // Dosar number — top right under badge
+      // Dosar number
       ctx.save();
-      ctx.font = '14px "Share Tech Mono"';
-      ctx.fillStyle = 'rgba(235,244,52,0.9)';
-      ctx.textAlign = 'right';
-      ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), W - 40, 96);
+      ctx.font = '13px "Share Tech Mono"';
+      ctx.fillStyle = 'rgba(235,244,52,0.85)';
+      ctx.textAlign = 'left';
+      ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), 30, 106);
       ctx.restore();
 
-      // Barcode — top right under dosar
-      drawBarcode(W - 44, 108);
+      // ── PHOTO — right side, portrait frame
+      const photoX = 530;
+      const photoY = 30;
+      const photoW = 510;
+      const photoH = 680;
 
-      // Agent name — big white, anchored at nameY
+      // Glow behind photo
+      ctx.save();
+      ctx.shadowColor = '#d82a92';
+      ctx.shadowBlur = 40;
+      ctx.fillStyle = '#d82a92';
+      ctx.fillRect(photoX - 4, photoY - 4, photoW + 8, photoH + 8);
+      ctx.shadowBlur = 0;
+      ctx.restore();
+
+      // Draw photo clipped to frame
+      if (window._petImage) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(photoX, photoY, photoW, photoH);
+        ctx.clip();
+        const img = window._petImage;
+        const ratio = img.width / img.height;
+        const frameRatio = photoW / photoH;
+        let sw, sh, sx, sy;
+        if (ratio > frameRatio) {
+          sh = photoH; sw = sh * ratio;
+          sx = photoX - (sw - photoW) / 2; sy = photoY;
+        } else {
+          sw = photoW; sh = sw / ratio;
+          sx = photoX; sy = photoY - (sh - photoH) / 3;
+        }
+        ctx.filter = 'contrast(1.1) brightness(0.95)';
+        ctx.drawImage(img, sx, sy, sw, sh);
+        ctx.filter = 'none';
+        ctx.restore();
+
+        // Photo border
+        ctx.save();
+        ctx.strokeStyle = '#d82a92';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(photoX, photoY, photoW, photoH);
+        ctx.restore();
+
+        // Photo corner marks
+        ctx.save();
+        ctx.strokeStyle = '#ebf434';
+        ctx.lineWidth = 2;
+        const cm = 20;
+        [[photoX,photoY,1,1],[photoX+photoW,photoY,-1,1],[photoX,photoY+photoH,1,-1],[photoX+photoW,photoY+photoH,-1,-1]].forEach(([cx,cy,dx,dy])=>{
+          ctx.beginPath(); ctx.moveTo(cx+dx*cm, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy+dy*cm); ctx.stroke();
+        });
+        ctx.restore();
+      }
+
+      // ── TEXTS — left side
       const displayName = (d.numeAgent || d.numeCod || 'NECUNOSCUT').toUpperCase();
-      let nameFontSize = 118;
+      const textMaxW = 480;
+
+      // "AGENTUL" in pink
+      ctx.save();
+      ctx.font = '700 52px "Bebas Neue"';
+      ctx.fillStyle = '#d82a92';
+      ctx.textAlign = 'left';
+      ctx.fillText('AGENTUL', 30, 220);
+      ctx.restore();
+
+      // Name — big white, auto-fit
+      let nameFontSize = 124;
       ctx.save();
       ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
-      while (ctx.measureText(displayName).width > W - 80 && nameFontSize > 60) {
+      while (ctx.measureText(displayName).width > textMaxW && nameFontSize > 52) {
         nameFontSize -= 4;
         ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
       }
-      const nameY = 310;
-      const gapAbove = 58; // same gap as VINE LA below
+      // If still too wide, wrap to 2 lines
+      if (ctx.measureText(displayName).width > textMaxW) {
+        const words = displayName.split(' ');
+        const mid = Math.ceil(words.length / 2);
+        const line1 = words.slice(0, mid).join(' ');
+        const line2 = words.slice(mid).join(' ');
+        ctx.fillStyle = '#fff';
+        ctx.fillText(line1, 30, 340);
+        ctx.fillText(line2, 30, 340 + nameFontSize + 4);
+      } else {
+        ctx.fillStyle = '#fff';
+        ctx.fillText(displayName, 30, 340);
+      }
+      ctx.restore();
 
-      // "AGENTUL" — exactly gapAbove px above name top (nameY - nameFontSize = name top)
-      ctx.font = '700 50px "Bebas Neue"';
-      ctx.fillStyle = '#d82a92';
-      ctx.textAlign = 'left';
-      ctx.fillText('AGENTUL', 40, nameY - nameFontSize + 44 - gapAbove + 10);
-
-      // Name
-      ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
-      ctx.fillStyle = '#fff';
-      ctx.fillText(displayName, 40, nameY);
-
-      // "VINE LA HELLO DOGGIE FESTIVAL" — gapAbove px below name baseline
-      ctx.font = '700 50px "Bebas Neue"';
+      // "VINE LA HELLO DOGGIE FESTIVAL" in yellow
+      ctx.save();
+      ctx.font = '700 46px "Bebas Neue"';
       ctx.fillStyle = '#ebf434';
-      ctx.fillText('VINE LA HELLO DOGGIE FESTIVAL', 40, nameY + gapAbove + 8);
+      ctx.textAlign = 'left';
+      // Wrap if too wide
+      const vineText = 'VINE LA HELLO DOGGIE FESTIVAL';
+      ctx.font = '700 46px "Bebas Neue"';
+      if (ctx.measureText(vineText).width > textMaxW) {
+        ctx.font = '700 46px "Bebas Neue"';
+        ctx.fillText('VINE LA HELLO', 30, 420 + (nameFontSize > 100 ? 0 : -40));
+        ctx.fillText('DOGGIE FESTIVAL', 30, 420 + 52 + (nameFontSize > 100 ? 0 : -40));
+      } else {
+        ctx.fillText(vineText, 30, 420);
+      }
+      ctx.restore();
+
+      // Barcode bottom-left of top section
+      drawBarcode(300, topH - 60);
+
+      // Bottom divider line of top section
+      ctx.save();
+      ctx.fillStyle = '#d82a92';
+      ctx.fillRect(0, topH - 3, W, 3);
       ctx.restore();
     }
 
@@ -1398,12 +1499,31 @@
 
   <script>
     function sendHeight() {
-      window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
+      // Use the wrapper div height, not body.scrollHeight which can grow infinitely
+      const wrapper = document.querySelector('.wrapper');
+      const h = wrapper ? wrapper.offsetHeight + 80 : document.documentElement.scrollHeight;
+      window.parent.postMessage({ iframeHeight: h }, '*');
     }
-    window.addEventListener('load', sendHeight);
+
+    // Send on load
+    window.addEventListener('load', function() {
+      sendHeight();
+      // Send again after fonts/images settle
+      setTimeout(sendHeight, 500);
+      setTimeout(sendHeight, 1500);
+    });
+
     window.addEventListener('resize', sendHeight);
-    const observer = new MutationObserver(sendHeight);
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
+    // Watch only direct children of wrapper, not entire body
+    const wrapper = document.querySelector('.wrapper');
+    if (wrapper) {
+      const observer = new MutationObserver(function() {
+        clearTimeout(window._heightTimer);
+        window._heightTimer = setTimeout(sendHeight, 100);
+      });
+      observer.observe(wrapper, { childList: true, subtree: false });
+    }
   </script>
 </body>
 </html>
