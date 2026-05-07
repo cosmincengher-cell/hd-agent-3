@@ -1008,9 +1008,6 @@
       // CORNER MARKS
       drawCornerMarks();
 
-      // BARCODE
-      drawBarcode(W - 120, 60);
-
       // STAMP
       drawStamp();
     }
@@ -1044,10 +1041,10 @@
         const onLoad = () => {
           // Fill entire canvas with image (cover)
           const ratio = img.width / img.height;
-          let sw = 1080, sh = 1080;
+          let sw = 1080, sh = 1440;
           let sx = 0, sy = 0;
-          if (ratio > 1) { sw = 1080 * ratio; sx = -(sw - 1080) / 2; }
-          else { sh = 1080 / ratio; sy = -(sh - 1080) / 2; }
+          if (ratio > sh/sw) { sw = sh * ratio; sx = -(sw - 1080) / 2; }
+          else { sh = sw / ratio; sy = -(sh - 1440) / 4; }
 
           // Apply noir filter via canvas
           ctx.save();
@@ -1080,228 +1077,228 @@
 
     function drawTopSection() {
       const d = agentData;
+      const W = 1080;
 
-      // CLASSIFIED badge
+      // CLASSIFIED badge — top left
       ctx.save();
       ctx.fillStyle = '#d82a92';
-      ctx.fillRect(40, 32, 220, 30);
-      ctx.font = 'bold 14px "Share Tech Mono"';
+      ctx.fillRect(40, 36, 240, 34);
+      ctx.font = 'bold 13px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'left';
-      ctx.fillText('■ STRICT CLASIFICAT ■', 52, 52);
+      ctx.fillText('■  STRICT CLASIFICAT  ■', 54, 58);
       ctx.restore();
+
+      // Barcode — top right
+      drawBarcode(W - 44, 36);
 
       // Dosar number
       ctx.save();
-      ctx.font = '13px "Share Tech Mono"';
+      ctx.font = '14px "Share Tech Mono"';
       ctx.fillStyle = 'rgba(235,244,52,0.9)';
       ctx.textAlign = 'left';
-      ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), 40, 88);
+      ctx.fillText((d.codDosar || 'HDG-2026-0001').toUpperCase(), 40, 96);
       ctx.restore();
 
-      // AGENT NAME — display user's pet name instead of AGENT SECRET
+      // "AGENTUL" label in pink
       ctx.save();
-      const displayName = (d.numeAgent || '').toUpperCase();
-      if (displayName) {
-        // Single name — big and bold
-        ctx.font = '900 108px "Bebas Neue"';
-        ctx.textAlign = 'left';
-        // First word white, rest pink
-        const nameParts = displayName.split(' ');
-        if (nameParts.length === 1) {
-          ctx.fillStyle = '#fff';
-          ctx.fillText(nameParts[0], 40, 260);
-        } else {
-          ctx.fillStyle = '#fff';
-          ctx.fillText(nameParts[0], 40, 195);
-          ctx.fillStyle = '#d82a92';
-          ctx.fillText(nameParts.slice(1).join(' '), 40, 295);
-        }
-      } else {
-        // Fallback to AGENT SECRET if no name provided
-        ctx.font = '900 108px "Bebas Neue"';
-        ctx.fillStyle = '#fff';
-        ctx.textAlign = 'left';
-        ctx.fillText('AGENT', 40, 195);
-        ctx.fillStyle = '#d82a92';
-        ctx.fillText('SECRET', 40, 295);
+      ctx.font = '700 68px "Bebas Neue"';
+      ctx.fillStyle = '#d82a92';
+      ctx.textAlign = 'left';
+      ctx.fillText('AGENTUL', 40, 170);
+      ctx.restore();
+
+      // Agent name — big white
+      const displayName = (d.numeAgent || d.numeCod || 'NECUNOSCUT').toUpperCase();
+      ctx.save();
+      ctx.font = '900 118px "Bebas Neue"';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'left';
+      // Fit long names
+      let nameFontSize = 118;
+      ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
+      while (ctx.measureText(displayName).width > W - 80 && nameFontSize > 60) {
+        nameFontSize -= 4;
+        ctx.font = `900 ${nameFontSize}px "Bebas Neue"`;
       }
+      ctx.fillText(displayName, 40, 170 + nameFontSize + 10);
+      ctx.restore();
+
+      // Tagline "VINE LA HELLO DOGGIE FESTIVAL" in yellow
+      ctx.save();
+      ctx.font = '700 52px "Bebas Neue"';
+      ctx.fillStyle = '#ebf434';
+      ctx.textAlign = 'left';
+      ctx.fillText('VINE LA HELLO DOGGIE FESTIVAL', 40, 400);
       ctx.restore();
     }
 
     function drawDossierSection() {
       const d = agentData;
-      const panelY = 810;
-      const panelH = 630;
+      const W = 1080;
+      const panelY = 840;
+      const panelH = 600;
 
       // Panel background
       ctx.save();
-      ctx.fillStyle = 'rgba(0,0,0,0.85)';
-      ctx.fillRect(0, panelY, 1080, panelH);
+      ctx.fillStyle = 'rgba(0,0,0,0.92)';
+      ctx.fillRect(0, panelY, W, panelH);
 
-      // Top border red line
+      // Top pink border line
       ctx.fillStyle = '#d82a92';
-      ctx.fillRect(0, panelY, 1080, 3);
+      ctx.fillRect(0, panelY, W, 3);
       ctx.restore();
 
-      // Grid lines
+      // AGENT name row
+      const agentLabel = panelY + 52;
       ctx.save();
-      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-      ctx.lineWidth = 1;
-      for (let x = 40; x < 1080; x += 120) {
-        ctx.beginPath(); ctx.moveTo(x, panelY); ctx.lineTo(x, panelY + panelH); ctx.stroke();
-      }
-      ctx.restore();
-
-      // AGENT NAME — if provided by user
-      const agentDisplayName = d.numeAgent || null;
-      if (agentDisplayName) {
-        ctx.save();
-        ctx.font = '13px "Share Tech Mono"';
-        ctx.fillStyle = 'rgba(235,244,52,0.7)';
-        ctx.textAlign = 'left';
-        ctx.fillText('AGENT:', 40, panelY + 26);
-        ctx.font = 'bold 16px "Share Tech Mono"';
-        ctx.fillStyle = 'rgba(235,244,52,1)';
-        ctx.fillText(agentDisplayName.toUpperCase(), 110, panelY + 26);
-        ctx.restore();
-      }
-
-      // NOME DE COD — big
-      ctx.save();
-      ctx.font = '84px "Bebas Neue"';
-      ctx.fillStyle = '#fff';
+      ctx.font = '13px "Share Tech Mono"';
+      ctx.fillStyle = 'rgba(240,237,232,0.5)';
       ctx.textAlign = 'left';
-      const codeName = (d.numeCod || 'NECUNOSCUT').toUpperCase();
-      ctx.fillText(codeName, 40, panelY + (agentDisplayName ? 110 : 84));
+      ctx.fillText('AGENT :', 40, agentLabel);
+
+      ctx.font = 'bold 22px "Share Tech Mono"';
+      ctx.fillStyle = '#fff';
+      ctx.fillText((d.numeAgent || d.numeCod || '—').toUpperCase(), 140, agentLabel);
       ctx.restore();
 
-      // Underline after code name
-      const underlineY = panelY + (agentDisplayName ? 120 : 94);
+      // Tagline / quote
+      const tagY = panelY + 100;
       ctx.save();
-      ctx.fillStyle = '#d82a92';
-      ctx.fillRect(40, underlineY, 580, 2);
+      ctx.font = 'italic 28px "DM Sans"';
+      ctx.fillStyle = '#ebf434';
+      ctx.textAlign = 'left';
+      const tagline = '"' + (d.taglineSecret || '') + '"';
+      wrapText(ctx, tagline, 40, tagY, W - 80, 36);
       ctx.restore();
 
-      // FIELDS — 2 column layout
-      const fieldsStartY = panelY + (agentDisplayName ? 148 : 118);
+      // Divider line under tagline
+      ctx.save();
+      ctx.strokeStyle = '#d82a92';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, tagY + 46);
+      ctx.lineTo(W - 40, tagY + 46);
+      ctx.stroke();
+      ctx.restore();
+
+      // Fields grid — 2 columns
+      const fieldsTop = tagY + 74;
+      const col1 = 40;
+      const col2 = 555;
+      const rowH = 130;
+
       const fields = [
-        { label: 'SPECIE', value: (d.specie || '—').toUpperCase() },
-        { label: 'RASĂ', value: (d.rasa || '—').toUpperCase() },
-        { label: 'MISIUNE', value: d.misiunePrincipala || '—' },
-        { label: 'ABILITATE', value: d.abilitateSpeciala || '—' },
+        { label: 'SPECIE :', value: (d.specie || '—').toUpperCase(), col: col1, row: 0 },
+        { label: 'MISIUNE :', value: d.misiunePrincipala || '—', col: col2, row: 0 },
+        { label: 'RASĂ :', value: (d.rasa || '—').toUpperCase(), col: col1, row: 1 },
+        { label: 'ABILITATE :', value: d.abilitateSpeciala || '—', col: col2, row: 1 },
       ];
 
-      fields.forEach((f, i) => {
-        const col = i < 2 ? 40 : 555;
-        const row = i < 2 ? (i * 100) : ((i - 2) * 100);
-        const ry = fieldsStartY + row;
-
+      fields.forEach((f) => {
+        const ry = fieldsTop + f.row * rowH;
         ctx.save();
+
+        // Label
         ctx.font = 'bold 15px "Share Tech Mono"';
         ctx.fillStyle = '#d82a92';
         ctx.textAlign = 'left';
-        ctx.fillText(f.label + ' :', col, ry);
+        ctx.fillText(f.label, f.col, ry);
 
-        ctx.font = '20px "Share Tech Mono"';
+        // Value
+        ctx.font = '26px "Share Tech Mono"';
         ctx.fillStyle = 'rgba(240,237,232,0.97)';
-        wrapText(ctx, f.value, col, ry + 26, 460, 24);
+        wrapText(ctx, f.value, f.col, ry + 36, 460, 30);
         ctx.restore();
       });
 
-      // NIVEL AMENINTARE + NIVEL EXPERIENTA side by side
-      const nivelY = panelY + (agentDisplayName ? 380 : 355);
-      ctx.save();
+      // Nivel amenintare + experienta
+      const nivelY = fieldsTop + 2 * rowH + 10;
 
-      // Nivel amenintare (left)
-      ctx.font = 'bold 13px "Share Tech Mono"';
-      ctx.fillStyle = '#d82a92';
+      // Nivel amenintare
+      ctx.save();
+      ctx.font = 'bold 12px "Share Tech Mono"';
+      ctx.fillStyle = 'rgba(216,42,146,0.8)';
       ctx.textAlign = 'left';
-      ctx.fillText('NIVEL AMENINȚARE :', 40, nivelY);
+      ctx.fillText('NIVEL AMENINȚARE :', col1, nivelY);
 
       const nivel = (d.nivelAmenintare || 'CLASIFICAT').toUpperCase();
-      const nivelColors = { 'RIDICOL': '#4caf50', 'MODERAT': '#ff9800', 'RIDICAT': '#ff5722', 'EXTREM': '#d82a92', 'CLASIFICAT': '#ebf434' };
+      const nivelColors = {
+        'RIDICOL': '#4caf50', 'MODERAT': '#ff9800',
+        'RIDICAT': '#ff5722', 'EXTREM': '#d82a92', 'CLASIFICAT': '#ebf434'
+      };
       const nivelColor = nivelColors[nivel] || '#d82a92';
       ctx.fillStyle = nivelColor;
-      ctx.fillRect(40, nivelY + 8, 270, 36);
-      ctx.font = 'bold 18px "Share Tech Mono"';
+      ctx.fillRect(col1, nivelY + 10, 380, 46);
+      ctx.font = 'bold 22px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
-      ctx.fillText('▸ ' + nivel, 54, nivelY + 31);
-
-      // Nivel experienta (right)
-      if (d.nivelExperienta) {
-        ctx.font = 'bold 13px "Share Tech Mono"';
-        ctx.fillStyle = '#ebf434';
-        ctx.fillText('NIVEL EXPERIENȚĂ :', 555, nivelY);
-        ctx.fillStyle = 'rgba(235,244,52,0.12)';
-        ctx.fillRect(550, nivelY + 7, 230, 28);
-        ctx.strokeStyle = 'rgba(235,244,52,0.6)';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(550, nivelY + 7, 230, 28);
-        ctx.font = 'bold 14px "Share Tech Mono"';
-        ctx.fillStyle = '#ebf434';
-        ctx.fillText('★ ' + d.nivelExperienta.toUpperCase(), 562, nivelY + 25);
-      }
+      ctx.fillText('▸  ' + nivel, col1 + 16, nivelY + 40);
       ctx.restore();
 
-      // TAGLINE
-      if (d.taglineSecret) {
+      // Nivel experienta
+      if (d.nivelExperienta) {
         ctx.save();
-        ctx.font = 'italic 18px "DM Sans"';
-        ctx.fillStyle = 'rgba(235,244,52,0.85)';
-        ctx.textAlign = 'center';
-        ctx.fillText('"' + d.taglineSecret + '"', 540, panelY + (agentDisplayName ? 330 : 310));
+        ctx.font = 'bold 12px "Share Tech Mono"';
+        ctx.fillStyle = 'rgba(235,244,52,0.8)';
+        ctx.textAlign = 'left';
+        ctx.fillText('NIVEL EXPERIENȚĂ :', col2, nivelY);
+        ctx.fillStyle = 'rgba(235,244,52,0.15)';
+        ctx.fillRect(col2, nivelY + 10, 440, 46);
+        ctx.strokeStyle = '#ebf434';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(col2, nivelY + 10, 440, 46);
+        ctx.font = 'bold 22px "Share Tech Mono"';
+        ctx.fillStyle = '#ebf434';
+        ctx.fillText('★  ' + d.nivelExperienta.toUpperCase(), col2 + 16, nivelY + 40);
         ctx.restore();
       }
 
-      // HASHTAGS bottom strip
+      // Bottom hashtag strip
       ctx.save();
       ctx.fillStyle = '#d82a92';
-      ctx.fillRect(0, panelY + panelH - 52, 1080, 52);
-      ctx.font = '19px "Share Tech Mono"';
+      ctx.fillRect(0, panelY + panelH - 62, W, 62);
+      ctx.font = 'bold 21px "Share Tech Mono"';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
-      ctx.font = '22px "Share Tech Mono"';
-      ctx.fillText('#AgentSecretHDF  ·  @hellodoggiero  ·  6-7 Iunie · Insula Câinilor', 540, panelY + panelH - 22);
+      ctx.fillText('#AgentSecretHDF  ·  @hellodoggiero  ·  6-7 Iunie  ·  Insula Câinilor', 540, panelY + panelH - 22);
       ctx.restore();
     }
 
     function drawBarcode(x, y) {
       ctx.save();
       const barcodeData = agentData?.codDosar || 'HDG-2026-0000';
-      const barW = 80;
-      const barH = 35;
-      let bx = x - barW;
-
+      const barH = 38;
+      let bx = x;
+      const bars = [];
       for (let i = 0; i < barcodeData.length; i++) {
-        const w = ((barcodeData.charCodeAt(i) % 3) + 1) * 1.5;
-        if (i % 2 === 0) {
-          ctx.fillStyle = 'rgba(240,237,232,0.7)';
-          ctx.fillRect(bx, y, w, barH);
-        }
-        bx += w + 1;
+        bars.push(((barcodeData.charCodeAt(i) % 3) + 1) * 1.8);
       }
-
-      ctx.font = '8px "Share Tech Mono"';
+      const totalW = bars.reduce((a, b) => a + b + 1, 0);
+      bx = x - totalW;
+      for (let i = 0; i < bars.length; i++) {
+        if (i % 2 === 0) {
+          ctx.fillStyle = 'rgba(240,237,232,0.75)';
+          ctx.fillRect(bx, y, bars[i], barH);
+        }
+        bx += bars[i] + 1;
+      }
+      ctx.font = '9px "Share Tech Mono"';
       ctx.fillStyle = 'rgba(240,237,232,0.5)';
       ctx.textAlign = 'center';
-      ctx.fillText(barcodeData, x - barW / 2 + 10, y + barH + 12);
+      ctx.fillText(barcodeData.toUpperCase(), x - totalW / 2, y + barH + 13);
       ctx.restore();
     }
 
     function drawCornerMarks() {
-      const size = 28, thick = 2;
+      const W = 1080, H = 1440;
+      const size = 32, thick = 2;
       const marks = [
-        [0, 0, 1, 1],
-        [1080 - size, 0, -1, 1],
-        [0, 1080 - size, 1, -1],
-        [1080 - size, 1080 - size, -1, -1],
+        [0, 0, 1, 1], [W - size, 0, -1, 1],
+        [0, H - size, 1, -1], [W - size, H - size, -1, -1],
       ];
-
       ctx.save();
       ctx.strokeStyle = '#d82a92';
       ctx.lineWidth = thick;
-
       marks.forEach(([mx, my, dx, dy]) => {
         ctx.beginPath();
         ctx.moveTo(mx + dx * size, my);
@@ -1313,30 +1310,24 @@
     }
 
     function drawStamp() {
-      // Hello Doggie Festival stamp circle
-      const cx = 900, cy = 960, r = 72;
+      const cx = 900, cy = 680, r = 72;
       ctx.save();
-      ctx.globalAlpha = 0.18;
-
+      ctx.globalAlpha = 0.15;
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.strokeStyle = '#d82a92';
       ctx.lineWidth = 4;
       ctx.stroke();
-
       ctx.beginPath();
       ctx.arc(cx, cy, r - 10, 0, Math.PI * 2);
       ctx.lineWidth = 1.5;
       ctx.stroke();
-
-      ctx.font = 'bold 26px "Bebas Neue"';
+      ctx.font = 'bold 28px "Bebas Neue"';
       ctx.fillStyle = '#d82a92';
       ctx.textAlign = 'center';
-      ctx.fillText('HDF', cx, cy + 5);
-      ctx.font = '9px "Share Tech Mono"';
-      ctx.fillText('2026', cx, cy + 20);
-
-      // Circular text
+      ctx.fillText('HDF', cx, cy + 8);
+      ctx.font = '10px "Share Tech Mono"';
+      ctx.fillText('2026', cx, cy + 22);
       const textArr = 'HELLO DOGGIE FESTIVAL · ';
       const arcR = r - 5;
       const startAngle = -Math.PI / 2 - (textArr.length * 0.13);
@@ -1349,11 +1340,10 @@
         ctx.fillText(textArr[i], 0, 0);
         ctx.restore();
       }
-
       ctx.restore();
     }
 
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
       const words = text.split(' ');
       let line = '';
       let currentY = y;
